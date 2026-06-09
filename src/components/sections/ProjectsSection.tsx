@@ -24,13 +24,13 @@ export default function ProjectsSection() {
       id="projects"
       ref={ref}
       aria-labelledby="projects-heading"
-      className="min-h-screen w-full flex items-center relative py-24"
+      className="w-full relative py-16 md:py-20 lg:py-24"
     >
       <Container>
         <motion.div
           variants={reduced ? undefined : staggerContainer}
           {...ap}
-          className="space-y-2 mb-6"
+          className="space-y-2 mb-8 sm:mb-10"
         >
           <motion.p variants={reduced ? undefined : fadeInUp} className="font-label text-xs uppercase tracking-[0.15em] text-primary">
             03 / Work
@@ -94,9 +94,9 @@ export default function ProjectsSection() {
                 </div>
               </Link>
 
-              <div className="p-3 sm:p-5 flex flex-col flex-grow gap-3 sm:gap-4">
-                <div className="space-y-1.5 sm:space-y-2">
-                  <h3 className="font-headline text-base sm:text-xl font-bold text-on-surface group-hover:text-primary transition-colors duration-200">
+              <div className="p-3 sm:p-5 flex flex-col flex-grow gap-2.5 sm:gap-4">
+                <div className="space-y-1 sm:space-y-2">
+                  <h3 className="font-headline text-base sm:text-xl font-bold leading-snug text-on-surface group-hover:text-primary transition-colors duration-200">
                     {project.title}
                   </h3>
                   <p className="text-on-surface-variant/70 text-xs sm:text-sm leading-relaxed line-clamp-2 sm:line-clamp-3">
@@ -124,7 +124,7 @@ export default function ProjectsSection() {
                 </div>
 
                 <div
-                  className="flex flex-wrap gap-3 sm:gap-5 pt-3 sm:pt-4"
+                  className="flex flex-wrap gap-x-3 gap-y-1.5 sm:gap-x-5 pt-2.5 sm:pt-4"
                   style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
                 >
                   {project.liveUrl && (
@@ -133,7 +133,7 @@ export default function ProjectsSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Live demo of ${project.title}`}
-                      className="flex items-center gap-1.5 text-primary hover:text-on-primary-container font-headline font-semibold text-xs sm:text-sm transition-colors duration-200"
+                      className="flex items-center gap-1.5 whitespace-nowrap text-primary hover:text-on-primary-container font-headline font-semibold text-xs sm:text-sm transition-colors duration-200"
                     >
                       Live Demo
                       <ExternalLink size={13} aria-hidden="true" />
@@ -145,7 +145,7 @@ export default function ProjectsSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`GitHub repo for ${project.title}`}
-                      className="flex items-center gap-1.5 text-on-surface-variant/60 hover:text-on-surface font-headline font-semibold text-xs sm:text-sm transition-colors duration-200"
+                      className="flex items-center gap-1.5 whitespace-nowrap text-on-surface-variant/60 hover:text-on-surface font-headline font-semibold text-xs sm:text-sm transition-colors duration-200"
                     >
                       Code
                       <GithubIcon size={13} aria-hidden="true" />

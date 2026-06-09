@@ -12,7 +12,12 @@ function BackToProjects() {
   return (
     <Link
       to="/#projects"
-      className="inline-flex items-center gap-2 rounded-md font-headline font-semibold text-sm text-on-surface-variant/70 hover:text-primary transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="inline-flex items-center gap-2 h-10 px-4 rounded-full
+                 border border-outline-variant/20 bg-white/[0.04]
+                 font-headline font-semibold text-sm text-on-surface-variant
+                 hover:text-primary hover:border-outline-variant/50 hover:bg-surface-container-high hover:-translate-y-0.5
+                 transition-all duration-200
+                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
     >
       <ArrowLeft size={16} aria-hidden="true" />
       Back to Projects
@@ -115,12 +120,12 @@ export default function ProjectDetailsPage({ projectId }: { projectId: string })
       }
 
   return (
-    <main id="main-content" className="relative z-10 pt-24 sm:pt-28 pb-20 sm:pb-24">
-      <Container className="space-y-10 sm:space-y-12">
+    <main id="main-content" className="relative z-10 pt-20 sm:pt-24 pb-14 sm:pb-16">
+      <Container className="space-y-8 sm:space-y-10">
         <BackToProjects />
 
         {/* Header — title, summary, stack, external links */}
-        <motion.header {...entrance} className="space-y-5 max-w-3xl">
+        <motion.header {...entrance} className="space-y-4 max-w-3xl">
           <p className="font-label text-xs uppercase tracking-[0.15em] text-primary">Case Study</p>
           <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-on-surface">
             {project.title}
@@ -170,11 +175,11 @@ export default function ProjectDetailsPage({ projectId }: { projectId: string })
         <ProjectGallery project={project} />
 
         {/* Case study breakdown */}
-        <section aria-label="Case study details" className="grid gap-4 sm:grid-cols-2">
+        <section aria-label="Case study details" className="grid gap-3 sm:gap-4 sm:grid-cols-2">
           {details.map((detail) => {
             const Icon = detail.icon
             return (
-              <div key={detail.label} className="glass-panel rounded-2xl p-5 sm:p-6 flex gap-4">
+              <div key={detail.label} className="glass-panel rounded-2xl p-4 sm:p-6 flex gap-3 sm:gap-4">
                 <div
                   className="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center"
                   style={{

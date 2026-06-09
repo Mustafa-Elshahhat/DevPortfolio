@@ -54,17 +54,16 @@ export default function HeroSection() {
     <section
       id="hero"
       aria-labelledby="hero-heading"
-      className="relative min-h-screen w-full flex items-center justify-center overflow-hidden py-24"
+      className="relative min-h-svh w-full flex items-center justify-center overflow-hidden pt-24 pb-16 md:py-20"
     >
       <div className="hero-gradient-mesh" aria-hidden="true" />
 
       <motion.div
         {...cp}
         className="relative z-10 max-w-6xl mx-auto px-4 sm:px-8 w-full
-                   flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-20
-                   h-full pt-16 lg:pt-0"
+                   flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-16"
       >
-        <div className="flex-1 space-y-8">
+        <div className="flex-1 space-y-6">
           <motion.p
             {...ip}
             className="font-label text-sm tracking-[0.08em] text-primary font-medium"

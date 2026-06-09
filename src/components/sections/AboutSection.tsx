@@ -25,7 +25,7 @@ export default function AboutSection() {
       id="about"
       ref={ref}
       aria-labelledby="about-heading"
-      className="min-h-screen w-full flex items-center bg-surface relative overflow-hidden py-24"
+      className="w-full bg-surface relative overflow-hidden py-16 md:py-20 lg:py-24"
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -39,7 +39,7 @@ export default function AboutSection() {
         <motion.div
           variants={staggerContainer}
           {...animProps}
-          className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
+          className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16"
         >
           <motion.div
             variants={fadeInLeft}
@@ -54,15 +54,15 @@ export default function AboutSection() {
                   transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                   className="group p-4 rounded-2xl card-hover cursor-default"
                   style={{
-                    background: 'rgba(255, 255, 255, 0.04)',
-                    border: '1px solid rgba(255, 255, 255, 0.07)',
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                   }}
                 >
                   <div className="text-2xl mb-2">{area.icon}</div>
                   <p className="font-headline text-sm font-bold text-on-surface mb-1">
                     {area.title}
                   </p>
-                  <p className="text-on-surface-variant/65 text-xs leading-relaxed">
+                  <p className="text-on-surface-variant/80 text-xs leading-relaxed">
                     {area.desc}
                   </p>
                 </motion.div>
@@ -79,7 +79,7 @@ export default function AboutSection() {
               />
             </motion.div>
 
-            <motion.div variants={staggerContainer} className="space-y-5 mt-6">
+            <motion.div variants={staggerContainer} className="space-y-4 mt-5">
               <motion.p variants={fadeInUp} className="text-on-surface-variant leading-relaxed text-lg">
                 I am a Computer Science student on a full-stack .NET development track, building complete web and desktop applications end to end.
               </motion.p>
@@ -93,7 +93,7 @@ export default function AboutSection() {
 
             <motion.div
               variants={fadeInUp}
-              className="flex flex-wrap gap-8 pt-6"
+              className="flex flex-wrap gap-x-8 gap-y-4 pt-4"
             >
               {[
                 { metric: 'ASP.NET Core', label: 'Backend' },

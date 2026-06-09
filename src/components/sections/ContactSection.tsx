@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { CheckCircle, AlertCircle, Send, Mail } from 'lucide-react'
 import { staggerContainer, fadeInUp } from '../../lib/motion'
 import { socialLinks } from '../../data/social'
+import IconLink from '../ui/IconLink'
 import { cn } from '../../lib/utils'
 
 const contactSchema = z.object({
@@ -53,7 +54,7 @@ function FloatingInput({
             ? 'border-error/60 focus:border-error/80'
             : focused
               ? 'border-primary/60'
-              : 'border-outline-variant/20 hover:border-outline-variant/30',
+              : 'border-outline-variant/30 hover:border-outline-variant/40',
         )}
         {...registration}
         onFocus={() => {
@@ -76,7 +77,7 @@ function FloatingInput({
           'font-label tracking-widest uppercase',
           focused || hasValue
             ? 'top-2 text-[10px] text-primary'
-            : 'top-1/2 -translate-y-1/2 text-xs text-on-surface-variant/60',
+            : 'top-1/2 -translate-y-1/2 text-xs text-on-surface-variant/70',
         )}
       >
         {label}
@@ -124,7 +125,7 @@ function FloatingTextarea({
             ? 'border-error/60 focus:border-error/80'
             : focused
               ? 'border-primary/60'
-              : 'border-outline-variant/20 hover:border-outline-variant/30',
+              : 'border-outline-variant/30 hover:border-outline-variant/40',
         )}
         {...registration}
         onFocus={() => {
@@ -147,7 +148,7 @@ function FloatingTextarea({
           'font-label tracking-widest uppercase',
           focused || hasValue
             ? 'top-2 text-[10px] text-primary'
-            : 'top-5 text-xs text-on-surface-variant/60',
+            : 'top-5 text-xs text-on-surface-variant/70',
         )}
       >
         {label}
@@ -215,7 +216,7 @@ export default function ContactSection() {
       id="contact"
       ref={ref}
       aria-labelledby="contact-heading"
-      className="min-h-screen w-full flex items-center bg-surface relative overflow-hidden py-24"
+      className="w-full bg-surface relative overflow-hidden py-16 md:py-20 lg:py-24"
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -250,35 +251,29 @@ export default function ContactSection() {
             </p>
           </motion.div>
 
-          <motion.div variants={fadeInUp} className="flex flex-wrap gap-6 mb-6">
+          <motion.div variants={fadeInUp} className="flex flex-wrap items-center gap-3 mb-6">
             <a
               href="mailto:mustafaelshahhat@gmail.com"
-              className="flex items-center gap-2.5 text-on-surface-variant/70 hover:text-primary transition-colors duration-200 group"
+              className="inline-flex items-center gap-2.5 h-10 px-4 rounded-full
+                         border border-outline-variant/20 bg-white/[0.04]
+                         text-on-surface-variant hover:text-primary hover:border-outline-variant/50 hover:bg-surface-container-high hover:-translate-y-0.5
+                         transition-all duration-200
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-surface-container-high group-hover:bg-primary/10 transition-colors duration-200">
-                <Mail size={16} className="text-primary" aria-hidden="true" />
-              </div>
+              <Mail size={16} className="text-primary shrink-0" aria-hidden="true" />
               <span className="font-label text-sm">mustafaelshahhat@gmail.com</span>
             </a>
-          </motion.div>
-
-          <motion.div variants={fadeInUp} className="flex gap-4 mb-6">
-            {socialLinks.filter(l => l.label === 'GitHub' || l.label === 'LinkedIn').map((link) => {
-              const Icon = link.icon
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  aria-label={link.label}
-                  className="flex items-center gap-2 text-on-surface-variant/60 hover:text-primary transition-all duration-200 font-label text-sm hover:-translate-y-0.5"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Icon size={16} aria-hidden="true" strokeWidth={1.5} />
-                  {link.label}
-                </a>
-              )
-            })}
+            {socialLinks.filter(l => l.label === 'GitHub' || l.label === 'LinkedIn').map((link) => (
+              <IconLink
+                key={link.label}
+                href={link.href}
+                icon={link.icon}
+                label={link.label}
+                size={16}
+                showLabel
+                external
+              />
+            ))}
           </motion.div>
 
           <AnimatePresence mode="wait">

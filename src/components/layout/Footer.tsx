@@ -1,4 +1,5 @@
 import { socialLinks } from '../../data/social'
+import IconLink from '../ui/IconLink'
 
 export default function Footer() {
   const year = new Date().getFullYear()
@@ -15,18 +16,17 @@ export default function Footer() {
         </div>
 
         {/* Social links */}
-        <div className="flex gap-6">
+        <div className="flex items-center gap-3">
           {socialLinks.map((link) => (
-            <a
+            <IconLink
               key={link.label}
               href={link.href}
-              aria-label={link.label}
-              className="text-on-surface-variant/60 hover:text-primary transition-all duration-200 hover:-translate-y-0.5 font-label text-sm uppercase tracking-widest"
-              target={link.href.startsWith('mailto') || link.href.startsWith('tel') ? undefined : '_blank'}
-              rel={link.href.startsWith('mailto') || link.href.startsWith('tel') ? undefined : 'noopener noreferrer'}
-            >
-              {link.label}
-            </a>
+              icon={link.icon}
+              label={link.label}
+              size={18}
+              showLabel
+              external={!link.href.startsWith('mailto') && !link.href.startsWith('tel')}
+            />
           ))}
         </div>
 
