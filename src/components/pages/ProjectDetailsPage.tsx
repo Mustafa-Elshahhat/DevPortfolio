@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import {
   ArrowLeft, ExternalLink, Target, Zap, Layers, Gauge,
@@ -11,6 +12,9 @@ import Button from '../ui/Button'
 import GithubIcon from '../icons/GithubIcon'
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number]
+
+/** Minimum horizontal distance (px) a touch must travel to count as a swipe. */
+const SWIPE_THRESHOLD = 50
 
 function BackToProjects() {
   return (
@@ -32,7 +36,12 @@ function BackToProjects() {
 
 /* Lightweight fullscreen screenshot viewer: dialog semantics, Escape /
    backdrop / close-button dismissal, arrow-key navigation, a minimal Tab
-   trap across its buttons, and body scroll-lock while open. */
+   trap across its buttons, body scroll-lock while open, and mobile swipe
+   navigation.
+   
+   Rendered via createPortal to document.body so it escapes any parent
+   stacking context (the main content sits at z-10) and reliably covers
+   the navbar (z-40). */
 function ImageLightbox({
   title,
   gallery,
@@ -51,6 +60,11 @@ function ImageLightbox({
   const dialogRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const multiple = gallery.length > 1
+
+  // ── Touch / swipe state (refs to avoid re-renders) ──
+  const touchStartX = useRef<number | null>(null)
+  const touchStartY = useRef<number | null>(null)
+  const touchSwiped = useRef(false)
 
   useEffect(() => {
     closeRef.current?.focus()
@@ -101,29 +115,67 @@ function ImageLightbox({
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [index, gallery.length, multiple, onClose, onNavigate])
 
+  // ── Touch handlers for mobile swipe navigation ──
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    touchStartY.current = e.touches[0].clientY
+    touchSwiped.current = false
+  }, [])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return
+    if (!multiple) return
+
+    const deltaX = e.touches[0].clientX - touchStartX.current
+    const deltaY = e.touches[0].clientY - touchStartY.current
+
+    // Only count as a horizontal swipe if the horizontal movement dominates
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > SWIPE_THRESHOLD && !touchSwiped.current) {
+      touchSwiped.current = true
+      if (deltaX < 0) {
+        // Swipe left → next image
+        onNavigate((index + 1) % gallery.length)
+      } else {
+        // Swipe right → previous image
+        onNavigate((index - 1 + gallery.length) % gallery.length)
+      }
+    }
+  }, [multiple, index, gallery.length, onNavigate])
+
+  const handleTouchEnd = useCallback(() => {
+    touchStartX.current = null
+    touchStartY.current = null
+    touchSwiped.current = false
+  }, [])
+
   const controlClass =
     'flex items-center justify-center w-11 h-11 rounded-full bg-white/[0.08] border border-white/15 ' +
     'text-on-surface backdrop-blur-md transition-colors duration-200 hover:bg-white/[0.18] ' +
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'
 
-  return (
+  return createPortal(
     <motion.div
       ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-label={`${title} screenshot — full-size preview`}
       onClick={onClose}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       {...(reduced
         ? {}
         : { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.2, ease: EASE } })}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[#05080f]/[0.93] backdrop-blur-sm"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#05080f]/[0.93] backdrop-blur-sm"
     >
       <img
         src={gallery[index]}
         alt={`${title} screenshot ${index + 1} of ${gallery.length}`}
         onClick={(e) => e.stopPropagation()}
+        draggable={false}
         className="max-w-[calc(100vw-1.5rem)] max-h-[calc(100svh-7rem)] sm:max-w-[calc(100vw-8rem)]
-                   object-contain rounded-lg shadow-[0_40px_120px_rgba(0,0,0,0.7)]"
+                   object-contain rounded-lg shadow-[0_40px_120px_rgba(0,0,0,0.7)]
+                   select-none touch-pan-y"
       />
 
       <button
@@ -134,13 +186,14 @@ function ImageLightbox({
           onClose()
         }}
         aria-label="Close full-size preview"
-        className={`absolute top-4 right-4 ${controlClass}`}
+        className={`absolute top-4 right-4 sm:top-5 sm:right-5 ${controlClass}`}
       >
         <X size={20} aria-hidden="true" />
       </button>
 
       {multiple && (
         <>
+          {/* Prev/Next arrows — hidden on mobile, visible on sm+ */}
           <button
             type="button"
             onClick={(e) => {
@@ -148,7 +201,7 @@ function ImageLightbox({
               onNavigate((index - 1 + gallery.length) % gallery.length)
             }}
             aria-label="Previous screenshot"
-            className={`absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 ${controlClass}`}
+            className={`absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 hidden sm:flex ${controlClass}`}
           >
             <ChevronLeft size={22} aria-hidden="true" />
           </button>
@@ -159,10 +212,12 @@ function ImageLightbox({
               onNavigate((index + 1) % gallery.length)
             }}
             aria-label="Next screenshot"
-            className={`absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 ${controlClass}`}
+            className={`absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 hidden sm:flex ${controlClass}`}
           >
             <ChevronRight size={22} aria-hidden="true" />
           </button>
+
+          {/* Image counter */}
           <p
             aria-live="polite"
             onClick={(e) => e.stopPropagation()}
@@ -174,7 +229,8 @@ function ImageLightbox({
           </p>
         </>
       )}
-    </motion.div>
+    </motion.div>,
+    document.body,
   )
 }
 
