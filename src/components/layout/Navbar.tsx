@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Menu, X,
   Home,
@@ -26,6 +26,25 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled]     = useState(false)
   const activeId                    = useScrollSpy(SECTION_IDS)
+
+  // The mobile menu docks directly beneath the navbar. Instead of hard-coding a
+  // height (brittle once the webfont loads or the scrolled border toggles), we
+  // measure the navbar and offset the menu by its real height plus a small gap.
+  const navRef                      = useRef<HTMLElement>(null)
+  const [navHeight, setNavHeight]   = useState(64)
+  const MENU_GAP                    = 8
+
+  // Keep navHeight in sync with the rendered navbar across font load, the
+  // scrolled-state border change, and any viewport resize.
+  useEffect(() => {
+    const el = navRef.current
+    if (!el) return
+    const measure = () => setNavHeight(el.offsetHeight)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   // Track scroll so we can strengthen the backdrop when user scrolls
   useEffect(() => {
@@ -77,13 +96,15 @@ export default function Navbar() {
             z-0          background orbs
             z-10         main page content (normal flow)
             z-20         mobile menu backdrop
-            z-30         mobile menu drawer (above backdrop, below navbar
-                         so the navbar's close button stays clickable)
+            z-30         mobile menu drawer (docked just beneath the navbar via
+                         the measured navHeight; above backdrop, below navbar so
+                         the navbar's close button stays clickable)
             z-40         navbar (this element)
             z-[100]      project modal (portaled to body, above all nav)
             z-[200]      skip link (always reachable for keyboard users)
        ─────────────────────────────────────────────────────── */}
       <nav
+        ref={navRef}
         role="navigation"
         aria-label="Main navigation"
         className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 sm:px-10 py-3 transition-all duration-300"
@@ -184,8 +205,9 @@ export default function Navbar() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="fixed top-[60px] left-0 right-0 z-30 md:hidden mx-4 rounded-2xl overflow-hidden"
+              className="fixed left-0 right-0 z-30 md:hidden mx-4 rounded-2xl overflow-hidden"
               style={{
+              top:                  navHeight + MENU_GAP,
               background:           'rgba(10, 16, 40, 0.97)',
               backdropFilter:       'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',

@@ -159,7 +159,7 @@ export default function HeroSection() {
             }}
           >
             <img
-              src="/images/hero/moustafa-elshahhat-hero.png"
+              src="/images/hero/moustafa-elshahhat-hero.webp"
               alt="Moustafa Elshahhat, Computer Science student and full-stack .NET developer"
               width={1122}
               height={1402}
