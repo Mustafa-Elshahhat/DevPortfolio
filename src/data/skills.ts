@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-import { Code2, Palette, Wrench, Layers } from 'lucide-react'
+import { Server, Database, Code2, Wrench } from 'lucide-react'
 
 export interface SkillCategory {
   id:     string
@@ -10,27 +10,27 @@ export interface SkillCategory {
 
 export const skillCategories: SkillCategory[] = [
   {
+    id:     'backend',
+    label:  'Backend',
+    icon:   Server,
+    skills: ['C#', 'ASP.NET Core', 'REST APIs', 'Entity Framework Core', 'Authentication (JWT)'],
+  },
+  {
+    id:     'databases',
+    label:  'Databases',
+    icon:   Database,
+    skills: ['SQL Server', 'EF Core', 'SQLite', 'Data Modeling'],
+  },
+  {
     id:     'frontend',
-    label:  'Frontend Engineering',
+    label:  'Front-End',
     icon:   Code2,
-    skills: ['Angular', 'TypeScript', 'RxJS', 'HTML5 / CSS3', 'State Management (NgRx/Signals)'],
-  },
-  {
-    id:     'styling',
-    label:  'Styling & UI',
-    icon:   Palette,
-    skills: ['Tailwind CSS', 'SASS / CSS Modules', 'Responsive Design', 'Figma (basic)'],
-  },
-  {
-    id:     'engineering',
-    label:  'Architecture & Perf.',
-    icon:   Layers,
-    skills: ['Clean Architecture', 'SOLID Principles', 'Scalable Component Architecture', 'Performance Optimization'],
+    skills: ['Angular', 'React', 'TypeScript', 'HTML5 / CSS3', 'Tailwind CSS', 'Responsive Design'],
   },
   {
     id:     'tools',
-    label:  'Tools & Integration',
+    label:  'Tools & Other',
     icon:   Wrench,
-    skills: ['REST API Integration', 'Git & GitHub', 'Postman', 'Vite / Webpack'],
+    skills: ['Git & GitHub', 'Postman', 'Node.js', 'WPF (Desktop)', 'Layered / Clean Architecture'],
   },
 ]

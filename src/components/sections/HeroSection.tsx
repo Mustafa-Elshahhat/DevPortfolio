@@ -6,22 +6,23 @@ import { socialLinks } from '../../data/social'
 import Button from '../ui/Button'
 import IconLink from '../ui/IconLink'
 
-const CODE_SNIPPET = `const engineer = {
+const CODE_SNIPPET = `const developer = {
   name: "Mostafa",
-  role: "Front-End Engineer",
+  role: "CS Student · Full-Stack .NET",
   stack: [
+    "ASP.NET Core",
+    "C#",
     "Angular",
-    "TypeScript",
-    "RxJS"
+    "SQL Server"
   ],
-  passion: "Clean Architecture & Scalable UI Systems",
+  focus: "REST APIs, Databases & Responsive UI",
   build() {
-    return this.passion
+    return this.focus
       + this.stack;
   }
 };`
 
-const KEYWORDS = ['Angular', 'Performance', 'Architecture', 'RxJS', 'Scalability']
+const KEYWORDS = ['ASP.NET Core', 'C#', 'Angular', 'SQL Server', 'REST APIs']
 
 function useTypewriter(words: string[], typingSpeed = 80, deletingSpeed = 50, pauseDuration = 2000) {
   const [displayText, setDisplayText] = useState('')
@@ -92,9 +93,9 @@ export default function HeroSection() {
             className="font-headline text-5xl md:text-6xl lg:text-7xl font-bold
                        tracking-tight text-on-surface leading-[1.04]"
           >
-            Front-End{' '}
-            <span className="block">Software</span>
-            <span className="gradient-text text-glow">Engineer</span>
+            Computer Science{' '}
+            <span className="block">Student</span>
+            <span className="gradient-text text-glow">Full-Stack .NET</span>
           </motion.h1>
 
           <motion.p
@@ -102,11 +103,12 @@ export default function HeroSection() {
             className="text-lg md:text-xl text-on-surface-variant/80
                        font-light leading-relaxed max-w-xl"
           >
-            I build scalable, high-performance web applications using{' '}
-            <span className="keyword-highlight">Angular</span>,
-            with a strong focus on <span className="keyword-highlight">clean architecture</span>,
-            advanced <span className="keyword-highlight">state management</span>,
-            and seamless user experiences.
+            Computer Science student on a full-stack .NET track. I build web and desktop
+            applications with <span className="keyword-highlight">ASP.NET Core</span>,{' '}
+            <span className="keyword-highlight">C#</span>,
+            <span className="keyword-highlight"> Angular</span> and{' '}
+            <span className="keyword-highlight">SQL Server</span> — REST APIs,
+            authentication, databases, dashboards and responsive UI.
           </motion.p>
 
           <motion.div {...ip} className="flex items-center gap-3">

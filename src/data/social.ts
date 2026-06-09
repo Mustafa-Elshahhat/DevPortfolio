@@ -10,12 +10,12 @@ export interface SocialLink {
 export const socialLinks: SocialLink[] = [
   {
     label: 'GitHub',
-    href:  'https://github.com/mustafaelshahhat-art',
+    href:  'https://github.com/moustafa-elshahhat',
     icon:  Code2,
   },
   {
     label: 'LinkedIn',
-    href:  'https://www.linkedin.com/in/moustafa-elshahhat-a203ba406/',
+    href:  'https://www.linkedin.com/in/moustafa-elshahhat/',
     icon:  Link2,
   },
   {

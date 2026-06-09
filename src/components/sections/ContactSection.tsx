@@ -243,8 +243,8 @@ export default function ContactSection() {
               Let&apos;s Work Together
             </h2>
             <p className="text-on-surface-variant">
-              Have a project in mind or looking for a front-end engineer?
-              I&apos;d love to hear from you. Let&apos;s build something exceptional.
+              Have a project in mind, an internship, or a full-stack .NET opportunity?
+              I&apos;d love to hear from you. Let&apos;s build something together.
             </p>
           </motion.div>
 

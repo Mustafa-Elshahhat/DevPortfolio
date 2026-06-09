@@ -1,11 +1,15 @@
 import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { ExternalLink, Code2, X, Zap, Layers, Target, Gauge } from 'lucide-react'
 import { staggerContainer, fadeInUp, scaleIn, slideUpReveal } from '../../lib/motion'
 import { projects, type Project } from '../../data/projects'
 import Container from '../ui/Container'
 
 function ProjectModal({ project, onClose }: { project: Project; onClose: () => void }) {
+  const gallery = project.gallery ?? [project.imageUrl]
+  const [activeImage, setActiveImage] = useState(gallery[0])
+
   const details = [
     { icon: Target, label: 'Problem', text: project.details.problem },
     { icon: Zap,    label: 'Solution', text: project.details.solution },
@@ -14,19 +18,30 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
   ]
 
   useEffect(() => {
+    // Signal global overlays (e.g. the mobile nav) to close so they can
+    // never overlap the modal, and lock body scroll while it is open.
+    window.dispatchEvent(new Event('project-modal-open'))
+    document.body.style.overflow = 'hidden'
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
     window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
+    }
   }, [onClose])
 
-  return (
+  // Portaled to document.body so the modal escapes <main>'s z-10 stacking
+  // context and its z-index is honoured above the navbar (see layer system
+  // documented in Navbar.tsx).
+  return createPortal(
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[200] flex items-center justify-center p-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-6"
       onClick={onClose}
     >
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
@@ -37,7 +52,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         exit={{ opacity: 0, y: 15, scale: 0.97 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         onClick={(e) => e.stopPropagation()}
-        className="relative z-10 w-full max-w-5xl overflow-hidden rounded-2xl"
+        className="relative z-10 w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -120,8 +135,54 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
             })}
           </div>
         </div>
+
+        <div className="px-8 pb-8 space-y-3 border-t border-white/[0.06] pt-6">
+          <p className="font-label text-xs uppercase tracking-[0.15em] text-primary">Screenshots</p>
+          <div
+            className="relative w-full aspect-[16/9] rounded-xl overflow-hidden"
+            style={{ background: project.imageBg }}
+          >
+            <img
+              src={activeImage}
+              alt={`${project.title} screenshot`}
+              loading="lazy"
+              className="absolute inset-0 w-full h-full object-contain"
+            />
+          </div>
+
+          {gallery.length > 1 && (
+            <div className="flex gap-3 overflow-x-auto pb-1" role="list" aria-label={`${project.title} screenshots`}>
+              {gallery.map((src, idx) => {
+                const isActive = src === activeImage
+                return (
+                  <button
+                    key={src}
+                    type="button"
+                    onClick={() => setActiveImage(src)}
+                    aria-label={`View screenshot ${idx + 1} of ${project.title}`}
+                    aria-current={isActive}
+                    className="relative flex-shrink-0 w-28 sm:w-32 aspect-[16/9] rounded-lg overflow-hidden transition-all duration-200"
+                    style={{
+                      background: project.imageBg,
+                      border:     isActive ? '2px solid rgba(192,193,255,0.7)' : '1px solid rgba(255,255,255,0.1)',
+                      opacity:    isActive ? 1 : 0.6,
+                    }}
+                  >
+                    <img
+                      src={src}
+                      alt=""
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-contain"
+                    />
+                  </button>
+                )
+              })}
+            </div>
+          )}
+        </div>
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body,
   )
 }
 
@@ -158,7 +219,7 @@ export default function ProjectsSection() {
               Featured Work
             </motion.h2>
             <motion.p variants={reduced ? undefined : fadeInUp} className="text-on-surface-variant/75 text-lg max-w-2xl">
-              Production-grade software applications built with scalable architecture and optimized performance.
+              Full-stack and desktop applications spanning ASP.NET Core APIs, SQL Server databases, and Angular, React, and Flutter front-ends.
             </motion.p>
           </motion.div>
 
@@ -191,18 +252,25 @@ export default function ProjectsSection() {
                 }}
               >
                 <div
-                  className="h-32 lg:h-40 relative overflow-hidden"
+                  className="aspect-[16/9] relative overflow-hidden"
                   style={{ background: project.imageBg }}
-                  aria-hidden="true"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(8,15,34,0.85)] to-transparent" />
+                  <img
+                    src={project.imageUrl}
+                    alt={`${project.title} screenshot`}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-contain"
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(8,15,34,0.85)] to-transparent" aria-hidden="true" />
 
                   <div className="absolute top-4 right-5 font-headline font-bold text-6xl"
-                    style={{ color: 'rgba(192,193,255,0.08)' }}>
+                    style={{ color: 'rgba(192,193,255,0.08)' }}
+                    aria-hidden="true">
                     0{i + 1}
                   </div>
 
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px]" aria-hidden="true">
                     <span className="font-headline text-sm font-bold text-white px-5 py-2.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-sm">
                       View Case Study →
                     </span>

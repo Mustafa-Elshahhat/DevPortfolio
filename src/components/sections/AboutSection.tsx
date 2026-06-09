@@ -5,10 +5,10 @@ import SectionHeading from '../ui/SectionHeading'
 import Container from '../ui/Container'
 
 const FOCUS_AREAS = [
-  { icon: '⚡', title: 'Performance', desc: 'Optimized rendering & change detection' },
-  { icon: '🏗️', title: 'Architecture', desc: 'Scalable, modular component systems' },
-  { icon: '🔄', title: 'State Mgmt', desc: 'Reactive state management patterns' },
-  { icon: '🎨', title: 'UI Systems', desc: 'Design systems & responsive layouts' },
+  { icon: '🧩', title: 'Backend APIs', desc: 'ASP.NET Core REST APIs & authentication' },
+  { icon: '🗄️', title: 'Databases', desc: 'SQL Server modeling with EF Core' },
+  { icon: '🎨', title: 'Front-End', desc: 'Angular & React, responsive UI' },
+  { icon: '🔗', title: 'Full-Stack', desc: 'End-to-end features & dashboards' },
 ]
 
 export default function AboutSection() {
@@ -81,13 +81,13 @@ export default function AboutSection() {
 
             <motion.div variants={staggerContainer} className="space-y-5 mt-6">
               <motion.p variants={fadeInUp} className="text-on-surface-variant leading-relaxed text-lg">
-                I am a Front-End Software Engineer specializing in building scalable, high-performance web applications.
+                I am a Computer Science student on a full-stack .NET development track, building complete web and desktop applications end to end.
               </motion.p>
               <motion.p variants={fadeInUp} className="text-on-surface-variant leading-relaxed">
-                I work primarily with Angular and TypeScript, focusing on creating maintainable, production-ready systems with advanced state management and clean architecture principles.
+                On the backend I work with ASP.NET Core and C# to build REST APIs, authentication, and SQL Server databases with Entity Framework Core. On the front-end I use Angular, React, and TypeScript to build responsive interfaces and admin dashboards.
               </motion.p>
               <motion.p variants={fadeInUp} className="text-on-surface-variant leading-relaxed">
-                My approach emphasizes performance optimization, scalable component architecture, clean and maintainable codebases, and real-world production readiness.
+                I enjoy connecting the full stack — from data model to API to UI — and have also explored desktop apps with WPF and cross-platform development.
               </motion.p>
             </motion.div>
 
@@ -96,9 +96,9 @@ export default function AboutSection() {
               className="flex flex-wrap gap-8 pt-6"
             >
               {[
-                { metric: 'Angular',    label: 'Primary Framework' },
-                { metric: 'TypeScript', label: 'Daily Language' },
-                { metric: 'RxJS',       label: 'Reactive Patterns' },
+                { metric: 'ASP.NET Core', label: 'Backend' },
+                { metric: 'Angular',      label: 'Front-End' },
+                { metric: 'SQL Server',   label: 'Database' },
               ].map((item) => (
                 <div key={item.metric} className="flex flex-col gap-1 group">
                   <span className="font-headline font-bold text-xl text-primary group-hover:text-glow transition-all duration-300">

@@ -35,14 +35,14 @@ export default function SkillsSection() {
             variants={reduced ? undefined : slideUpReveal}
             className="font-headline text-4xl md:text-5xl font-bold tracking-tight text-on-surface"
           >
-            Frontend Engineering Stack
+            Full-Stack .NET Engineering Stack
           </motion.h2>
 
           <motion.p
             variants={reduced ? undefined : fadeInUp}
             className="text-on-surface-variant/75 text-lg max-w-xl mx-auto"
           >
-            The tools and technologies I use daily to architect high-performance software applications.
+            The technologies I use across the stack — from ASP.NET Core APIs and SQL Server databases to Angular and React front-ends.
           </motion.p>
         </motion.div>
 

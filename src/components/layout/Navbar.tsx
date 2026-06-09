@@ -34,10 +34,31 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Close the menu when resizing up to desktop so it never stays stuck open
   useEffect(() => {
     const onResize = () => { if (window.innerWidth >= 768) setIsMenuOpen(false) }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  // While the menu is open: close on Escape and lock body scroll.
+  // Cleanup restores scroll + removes the listener on close/unmount.
+  useEffect(() => {
+    if (!isMenuOpen) return
+    const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') setIsMenuOpen(false) }
+    window.addEventListener('keydown', onKeyDown)
+    document.body.style.overflow = 'hidden'
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = ''
+    }
+  }, [isMenuOpen])
+
+  // If a project modal opens, close the mobile menu so the two layers never coexist.
+  useEffect(() => {
+    const close = () => setIsMenuOpen(false)
+    window.addEventListener('project-modal-open', close)
+    return () => window.removeEventListener('project-modal-open', close)
   }, [])
 
   const handleNavClick = (href: string) => {
@@ -51,11 +72,21 @@ export default function Navbar() {
       {/* ── Navbar row ─────────────────────────────────────────
           The full-width row has a dark background so NO content
           bleeds through it while scrolling.
+
+          Z-INDEX LAYER SYSTEM (keep in sync with ProjectsSection):
+            z-0          background orbs
+            z-10         main page content (normal flow)
+            z-20         mobile menu backdrop
+            z-30         mobile menu drawer (above backdrop, below navbar
+                         so the navbar's close button stays clickable)
+            z-40         navbar (this element)
+            z-[100]      project modal (portaled to body, above all nav)
+            z-[200]      skip link (always reachable for keyboard users)
        ─────────────────────────────────────────────────────── */}
       <nav
         role="navigation"
         aria-label="Main navigation"
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 sm:px-10 py-3 transition-all duration-300"
+        className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 sm:px-10 py-3 transition-all duration-300"
         style={{
           /* Solid dark background that fully blocks scrolling content */
           background: scrolled
@@ -129,16 +160,32 @@ export default function Navbar() {
       {/* ── Mobile menu ─────────────────────────────────────── */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            id="mobile-menu"
-            role="dialog"
-            aria-label="Mobile navigation"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="fixed top-[60px] left-0 right-0 z-40 md:hidden mx-4 rounded-2xl overflow-hidden"
-            style={{
+          <>
+            {/* Backdrop — sits below the navbar (z-40) so the close
+                button stays clickable; click to dismiss. */}
+            <motion.div
+              key="mobile-menu-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              onClick={() => setIsMenuOpen(false)}
+              className="fixed inset-0 z-20 md:hidden bg-black/40 backdrop-blur-sm"
+              aria-hidden="true"
+            />
+
+            <motion.div
+              key="mobile-menu"
+              id="mobile-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Mobile navigation"
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              className="fixed top-[60px] left-0 right-0 z-30 md:hidden mx-4 rounded-2xl overflow-hidden"
+              style={{
               background:           'rgba(10, 16, 40, 0.97)',
               backdropFilter:       'blur(24px)',
               WebkitBackdropFilter: 'blur(24px)',
@@ -173,6 +220,7 @@ export default function Navbar() {
               </div>
             </div>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
