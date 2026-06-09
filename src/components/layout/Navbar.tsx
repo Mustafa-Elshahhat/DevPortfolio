@@ -201,6 +201,7 @@ export default function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                    aria-current={isActive ? 'page' : undefined}
                     className={cn(
                       'flex items-center gap-3 px-4 py-3 rounded-xl text-base font-headline font-medium transition-all duration-200',
                       isActive

@@ -25,7 +25,7 @@ export default function SkillsSection() {
         >
           <motion.p
             variants={reduced ? undefined : fadeInUp}
-            className="font-label text-xs uppercase tracking-[0.18em] text-primary"
+            className="font-label text-xs uppercase tracking-[0.15em] text-primary"
           >
             02 / Skills
           </motion.p>

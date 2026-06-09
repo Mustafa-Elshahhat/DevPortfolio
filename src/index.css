@@ -35,8 +35,24 @@ body {
   outline-offset: 3px;
 }
 
-section[id] { 
+section[id] {
   scroll-margin-top: 80px;
+}
+
+/* Respect "prefers-reduced-motion": neutralize the decorative CSS keyframe
+   animations (orbs, gradient mesh, typing cursor, floating card, shimmer)
+   and transitions, and disable smooth scrolling. The framer-motion entrance
+   animations are already gated separately via useReducedMotion(). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration:        0.01ms !important;
+    animation-iteration-count: 1      !important;
+    transition-duration:       0.01ms !important;
+    scroll-behavior:           auto   !important;
+  }
 }
 
 .bg-orbs {

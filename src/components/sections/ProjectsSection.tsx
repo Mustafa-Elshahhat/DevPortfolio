@@ -250,7 +250,7 @@ export default function ProjectsSection() {
             {...ap}
             className="space-y-2 mb-6"
           >
-            <motion.p variants={reduced ? undefined : fadeInUp} className="font-label text-xs uppercase tracking-[0.18em] text-primary">
+            <motion.p variants={reduced ? undefined : fadeInUp} className="font-label text-xs uppercase tracking-[0.15em] text-primary">
               03 / Work
             </motion.p>
             <motion.h2

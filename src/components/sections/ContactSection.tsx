@@ -7,7 +7,6 @@ import { CheckCircle, AlertCircle, Send, Mail } from 'lucide-react'
 import { staggerContainer, fadeInUp } from '../../lib/motion'
 import { socialLinks } from '../../data/social'
 import { cn } from '../../lib/utils'
-import Footer from '../layout/Footer'
 
 const contactSchema = z.object({
   name:    z.string().min(2, 'Name must be at least 2 characters'),
@@ -77,7 +76,7 @@ function FloatingInput({
           'font-label tracking-widest uppercase',
           focused || hasValue
             ? 'top-2 text-[10px] text-primary'
-            : 'top-1/2 -translate-y-1/2 text-xs text-on-surface-variant/40',
+            : 'top-1/2 -translate-y-1/2 text-xs text-on-surface-variant/60',
         )}
       >
         {label}
@@ -148,7 +147,7 @@ function FloatingTextarea({
           'font-label tracking-widest uppercase',
           focused || hasValue
             ? 'top-2 text-[10px] text-primary'
-            : 'top-5 text-xs text-on-surface-variant/40',
+            : 'top-5 text-xs text-on-surface-variant/60',
         )}
       >
         {label}
@@ -242,7 +241,7 @@ export default function ContactSection() {
             <p className="font-label text-xs uppercase tracking-[0.15em] text-primary">
               04 / Contact
             </p>
-            <h2 id="contact-heading" className="font-headline text-4xl font-bold tracking-tight">
+            <h2 id="contact-heading" className="font-headline text-4xl md:text-5xl font-bold tracking-tight">
               Let&apos;s Work Together
             </h2>
             <p className="text-on-surface-variant">
@@ -423,10 +422,6 @@ export default function ContactSection() {
             )}
           </AnimatePresence>
         </motion.div>
-      </div>
-
-      <div className="absolute bottom-0 left-0 right-0">
-        <Footer />
       </div>
     </section>
   )

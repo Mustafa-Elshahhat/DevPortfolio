@@ -8,8 +8,8 @@ import IconLink from '../ui/IconLink'
 
 const KEYWORDS = ['ASP.NET Core', 'C#', 'Angular', 'SQL Server', 'REST APIs']
 
-function useTypewriter(words: string[], typingSpeed = 80, deletingSpeed = 50, pauseDuration = 2000) {
-  const [displayText, setDisplayText] = useState('')
+function useTypewriter(words: string[], typingSpeed = 80, deletingSpeed = 50, pauseDuration = 2000, enabled = true) {
+  const [displayText, setDisplayText] = useState(enabled ? '' : words[0])
   const [wordIndex, setWordIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -33,10 +33,11 @@ function useTypewriter(words: string[], typingSpeed = 80, deletingSpeed = 50, pa
   }, [displayText, isDeleting, wordIndex, words, pauseDuration])
 
   useEffect(() => {
+    if (!enabled) return
     const speed = isDeleting ? deletingSpeed : typingSpeed
     const timer = setTimeout(tick, speed)
     return () => clearTimeout(timer)
-  }, [tick, isDeleting, typingSpeed, deletingSpeed])
+  }, [tick, isDeleting, typingSpeed, deletingSpeed, enabled])
 
   return displayText
 }
@@ -47,7 +48,7 @@ export default function HeroSection() {
   const ip      = reduced ? {} : { variants: fadeInUp }
   const rp      = reduced ? {} : { variants: fadeInRight }
 
-  const typedKeyword = useTypewriter(KEYWORDS)
+  const typedKeyword = useTypewriter(KEYWORDS, 80, 50, 2000, !reduced)
 
   return (
     <section
@@ -95,14 +96,14 @@ export default function HeroSection() {
             authentication, databases, dashboards and responsive UI.
           </motion.p>
 
-          <motion.div {...ip} className="flex items-center gap-3">
+          <motion.div {...ip} className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <span className="font-mono text-sm text-on-surface-variant/40 tracking-wide">
               {'> '}focused_on:
             </span>
             <span className="font-mono text-sm text-primary font-medium">
               {typedKeyword}
             </span>
-            <span className="typing-cursor" aria-hidden="true" />
+            {!reduced && <span className="typing-cursor" aria-hidden="true" />}
           </motion.div>
 
           <motion.div {...ip} className="flex flex-wrap gap-4 pt-2">

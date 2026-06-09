@@ -4,6 +4,7 @@ import AboutSection from './components/sections/AboutSection'
 import SkillsSection from './components/sections/SkillsSection'
 import ProjectsSection from './components/sections/ProjectsSection'
 import ContactSection from './components/sections/ContactSection'
+import Footer from './components/layout/Footer'
 
 export default function App() {
   return (
@@ -31,6 +32,8 @@ export default function App() {
         <ProjectsSection />
         <ContactSection />
       </main>
+
+      <Footer />
     </>
   )
 }

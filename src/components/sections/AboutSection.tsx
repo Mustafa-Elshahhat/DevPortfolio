@@ -59,9 +59,9 @@ export default function AboutSection() {
                   }}
                 >
                   <div className="text-2xl mb-2">{area.icon}</div>
-                  <h4 className="font-headline text-sm font-bold text-on-surface mb-1">
+                  <p className="font-headline text-sm font-bold text-on-surface mb-1">
                     {area.title}
-                  </h4>
+                  </p>
                   <p className="text-on-surface-variant/65 text-xs leading-relaxed">
                     {area.desc}
                   </p>
